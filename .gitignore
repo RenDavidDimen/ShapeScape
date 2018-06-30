@@ -1,9 +1,9 @@
-﻿ShapeScape/[Ll]ibrary/
-ShapeScape/[Tt]emp/
-ShapeScape/[Oo]bj/
-ShapeScape/[Bb]uild/
-ShapeScape/[Bb]uilds/
-ShapeScape/Assets/AssetStoreTools*
+﻿[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Bb]uild/
+[Bb]uilds/
+Assets/AssetStoreTools*
 
 # Visual Studio cache directory
 .vs/
