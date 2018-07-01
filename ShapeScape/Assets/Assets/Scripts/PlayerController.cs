@@ -4,73 +4,75 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour {
 
-    public Rigidbody playerBody;
+    // public variables
+    public bool collision = false;
+    public LayerMask obstaclesLayer;
 
-    public Touch fStartTouch;
-    public Touch fEndTouch;
+    // private variables
+    private Rigidbody2D playerBody;
 
-    public float speed = 1000f;
-
-    private Vector3 moveLeft = new Vector3(-1.25f, 0f, 0f);
-    private Vector3 moveRight = new Vector3(1.25f, 0f, 0f);
-
-    private Vector3 startPos;
-
-    private bool moveInput = false;
+    private Vector2 startPos;
+    private Vector2 moveLeft = new Vector2(-1.25f, 0f);
+    private Vector2 moveRight = new Vector2(1.25f, 0f);
     private bool isMoving = false;
-
+    private bool moveInput = false;
     private string moveDir = "";
     private float timeIncrement = 0;
 
-	// Use this for initialization
-	void Start () {
-        playerBody = transform.GetComponent<Rigidbody>();
-	}
-	
-	// Update is called once per frame
-	void Update () {
+    private Collider2D playerCollider;
 
-        if (Input.GetKeyDown("left") && isMoving == false)
-        {
+
+	/* Start
+	 * Initialize character attributes
+	 */
+	void Start () {
+        playerBody = GetComponent<Rigidbody2D>();
+        playerCollider = GetComponent<Collider2D>();
+	}
+
+    /* LateUpdate
+     * Update player position and states with every frame
+     */
+    void LateUpdate() {
+        collision = Physics2D.IsTouchingLayers(playerCollider, obstaclesLayer);
+
+        // Accept player input only the character has stopped moving and is in a valid position
+        if (Input.GetKeyDown("left") && isMoving == false && playerBody.position.x > -1.25) {
             moveInput = true;
             moveDir = "left";
-            startPos = playerBody.position;    
-        } 
-        else if (Input.GetKeyDown("right") && isMoving == false)
-        {
+            startPos = playerBody.position;
+        }
+        else if (Input.GetKeyDown("right") && isMoving == false && playerBody.position.x < 1.25) {
             moveInput = true;
             moveDir = "right";
             startPos = playerBody.position;
-
         }
 
         //playerBody.transform.position = Vector3.Lerp(startPos, startPos+ moveLeft, 0.5f);
 
-        if (moveInput == true)
-        {
+        // Update character position every frame update
+        if (moveInput == true) {
             isMoving = true;
-            timeIncrement += 0.05f;
+            timeIncrement += 0.1f;
 
-            switch (moveDir)
-            {
+            switch (moveDir) {
                 case "left":
                     //moveLeft
-                    playerBody.transform.position = Vector3.Lerp(startPos, startPos + moveLeft, timeIncrement);
+                    playerBody.transform.position = Vector2.Lerp(startPos, startPos + moveLeft, timeIncrement);
                     break;
                 case "right":
                     //moveRight
-                    playerBody.transform.position = Vector3.Lerp(startPos, startPos + moveRight, timeIncrement);
+                    playerBody.transform.position = Vector2.Lerp(startPos, startPos + moveRight, timeIncrement);
                     break;
                 default:
                     break;
             }
         }
 
-        if (timeIncrement >= 1.0f)
-        {
+        if (timeIncrement >= 1.0f) {
             timeIncrement = 0;
             moveInput = false;
             isMoving = false;
         }
-	}
+    }
 }
