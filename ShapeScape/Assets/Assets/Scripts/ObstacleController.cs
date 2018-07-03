@@ -8,12 +8,18 @@ public class ObstacleController : MonoBehaviour {
     public LayerMask obstaclesLayer;
     public Transform parentObject;
     public GameObject generatedBlockade;
+    public float startSpeed = 3.0f;
+    public float maxSpeed = 7.0f;
+    public float speedIncrement = 0.001f;
+    public float lastBlockade = 4.0f;
+    public float minBlockadeGenPoint = 3.0f;
+    public float bloackadeGenPtIncrement = 0.0005f;
 
     // private variables;
     private Rigidbody2D[] childRigidbody;
-    private float startSpeed = 1.0f;
     private Vector2 generationPoint = new Vector2(0.0f, 7.0f);
     private float furthestBlock = -10;
+
 
 	void Start () {
         
@@ -34,11 +40,23 @@ public class ObstacleController : MonoBehaviour {
         }
 
         // Add block if enough space
-        if (furthestBlock <= 4.0f) {
-            Instantiate(generatedBlockade, generationPoint, Quaternion.identity, parentObject);
+        if (furthestBlock <= lastBlockade) {
+            var newPlatform = Instantiate(generatedBlockade, generationPoint, Quaternion.identity, parentObject);
+            newPlatform.gameObject.AddComponent<DestroySelf>();
         }
 
+        // Remove block if past destruction point
+
+
         // Update speed variable
-        startSpeed += 0.01f;
+        if (startSpeed <= maxSpeed) {
+            startSpeed += speedIncrement;
+        }
+
+        if (lastBlockade >= minBlockadeGenPoint) {
+            lastBlockade -= 0.001f;
+        }
+
+        print(startSpeed);
 	}
 }
