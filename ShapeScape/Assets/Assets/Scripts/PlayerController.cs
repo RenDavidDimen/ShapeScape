@@ -5,12 +5,11 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour {
 
     // public variables
-    public bool collision = false;
-    public LayerMask obstaclesLayer;
+    public GameManager gameManager;
+
 
     // private variables
     private Rigidbody2D playerBody;
-
     private Vector2 startPos;
     private Vector2 moveLeft = new Vector2(-1.25f, 0f);
     private Vector2 moveRight = new Vector2(1.25f, 0f);
@@ -34,8 +33,7 @@ public class PlayerController : MonoBehaviour {
      * Update player position and states with every frame
      */
     void LateUpdate() {
-        collision = Physics2D.IsTouchingLayers(playerCollider, obstaclesLayer);
-
+        
         // Accept player input only the character has stopped moving and is in a valid position
         if (Input.GetKeyDown("left") && isMoving == false && playerBody.position.x > -1.25) {
             moveInput = true;
@@ -47,8 +45,6 @@ public class PlayerController : MonoBehaviour {
             moveDir = "right";
             startPos = playerBody.position;
         }
-
-        //playerBody.transform.position = Vector3.Lerp(startPos, startPos+ moveLeft, 0.5f);
 
         // Update character position every frame update
         if (moveInput == true) {
@@ -73,6 +69,19 @@ public class PlayerController : MonoBehaviour {
             timeIncrement = 0;
             moveInput = false;
             isMoving = false;
+        }
+    }
+
+    public void resetPlayer() {
+        timeIncrement = 0;
+        moveInput = false;
+        isMoving = false;
+    }
+
+    private void OnCollisionEnter2D (Collision2D other) {
+        moveInput = false;
+        if (other.gameObject.tag == "block") {
+            gameManager.RestartGame();   
         }
     }
 }
