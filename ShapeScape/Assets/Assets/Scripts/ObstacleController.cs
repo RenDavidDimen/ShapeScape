@@ -5,24 +5,29 @@ using UnityEngine;
 public class ObstacleController : MonoBehaviour {
 
     // public variables
-    public LayerMask obstaclesLayer;
     public Transform parentObject;
-    public GameObject generatedBlockade;
-    public float startSpeed = 3.0f;
+    public GameObject[] blockades;
+    public float speed;
     public float maxSpeed = 7.0f;
     public float speedIncrement = 0.001f;
-    public float lastBlockade = 4.0f;
-    public float minBlockadeGenPoint = 3.0f;
+    public float lastBlockade;
+    public float minBlockadeGenPoint = 2.0f;
     public float bloackadeGenPtIncrement = 0.0005f;
 
     // private variables;
     private Rigidbody2D[] childRigidbody;
     private Vector2 generationPoint = new Vector2(0.0f, 7.0f);
     private float furthestBlock = -10;
+    private int blockadeSelector = 1;
+    private int tempSelector;
+    private float genBlockPoint = 3.5f;
+    private float startSpeed = 3.0f;
 
 
-	void Start () {
-        
+	public void Start () {
+        speed = startSpeed;
+        lastBlockade = genBlockPoint;
+        blockadeSelector = 1;
     }
 	
 	void Update () {
@@ -32,7 +37,7 @@ public class ObstacleController : MonoBehaviour {
 
         // Check objects for updated position
         foreach (Rigidbody2D blockade in childRigidbody) {
-            blockade.velocity = new Vector2(0.0f, -startSpeed);
+            blockade.velocity = new Vector2(0.0f, -speed);
 
             if (blockade.position.y > furthestBlock) {
                 furthestBlock = blockade.position.y;   
@@ -41,22 +46,28 @@ public class ObstacleController : MonoBehaviour {
 
         // Add block if enough space
         if (furthestBlock <= lastBlockade) {
-            var newPlatform = Instantiate(generatedBlockade, generationPoint, Quaternion.identity, parentObject);
-            newPlatform.gameObject.AddComponent<DestroySelf>();
+
+            do {
+                tempSelector = Random.Range(0, blockades.Length);
+            } while (tempSelector == blockadeSelector);
+
+            blockadeSelector = tempSelector;
+
+            GameObject newPlatform = Instantiate(blockades[blockadeSelector], generationPoint, Quaternion.identity, parentObject);
+            newPlatform.AddComponent<DestroySelf>();
         }
 
-        // Remove block if past destruction point
-
-
         // Update speed variable
-        if (startSpeed <= maxSpeed) {
-            startSpeed += speedIncrement;
+        if (speed <= maxSpeed) {
+            speed += speedIncrement;
         }
 
         if (lastBlockade >= minBlockadeGenPoint) {
-            lastBlockade -= 0.001f;
+            lastBlockade -= bloackadeGenPtIncrement;
         }
-
-        print(startSpeed);
 	}
+
+    public void stopBlocks() {
+        speed = 0;
+    }
 }
