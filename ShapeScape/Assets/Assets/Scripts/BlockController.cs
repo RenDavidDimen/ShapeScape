@@ -2,16 +2,29 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DestroySelf : MonoBehaviour {
-
+public class BlockController : MonoBehaviour {
+    public GameObject scObject;
+    public ScoreController scoreController;
     public float deactivationPoint = -10.0f;
+    private float playerPosY = -3.5f;
+    private bool addedPoint = false;
 
-	// Update is called once per frame
-	void Update () {
+    void Start()
+    {
+        scObject = GameObject.FindGameObjectWithTag("ScoreController");
+        scoreController = scObject.GetComponent<ScoreController>();
+    }
 
+    void Update () {
+        
         if (transform.position.y <= deactivationPoint)
         {
             Destroy(gameObject);
+        }
+        else if (transform.position.y <= playerPosY && addedPoint == false)
+        {
+            scoreController.UpdateScore();
+            addedPoint = true;
         }
 	}
 }
