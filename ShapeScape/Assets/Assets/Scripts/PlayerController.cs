@@ -6,7 +6,8 @@ public class PlayerController : MonoBehaviour {
 
     // public variables
     public GameManager gameManager;
-
+    public GameObject firstBlock;
+    public ScoreController scoreController;
 
     // private variables
     private Rigidbody2D playerBody;
@@ -17,6 +18,7 @@ public class PlayerController : MonoBehaviour {
     private bool moveInput = false;
     private string moveDir = "";
     private float timeIncrement = 0;
+    private bool firstBlockPassed = false;
 
     private Collider2D playerCollider;
 
@@ -70,12 +72,19 @@ public class PlayerController : MonoBehaviour {
             moveInput = false;
             isMoving = false;
         }
+
+        if (firstBlock.transform.position.y < transform.position.y && firstBlockPassed == false) {
+            scoreController.UpdateScore();
+            firstBlockPassed = true;
+        }
+
     }
 
     public void resetPlayer() {
         timeIncrement = 0;
         moveInput = false;
         isMoving = false;
+        firstBlockPassed = false;
     }
 
     private void OnCollisionEnter2D (Collision2D other) {

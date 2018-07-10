@@ -9,13 +9,14 @@ public class GameManager : MonoBehaviour {
     public GameObject firstBlock;
     public ScoreController scoreController;
     public GameObject deathMenu;
+    public AudioSource deathSound;
     private Vector2 playerStartPos = new Vector2(0, -3.5f);
     private Vector2 blockStartPos = new Vector2(0, 7);
     private BlockController[] blocksArray;
 
     public void PauseGame() {
         obstacleController.stopBlocks();
-
+        deathSound.Play();
         deathMenu.gameObject.SetActive(true);
         //StartCoroutine("RestartGameCoroutine");
     }

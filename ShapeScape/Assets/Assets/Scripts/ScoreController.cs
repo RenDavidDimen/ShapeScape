@@ -5,11 +5,13 @@ using UnityEngine.UI;
 
 public class ScoreController : MonoBehaviour {
     
+    public AudioSource pointSound;
     public Text scoreText;
     public Text highScoreText;
     private int score;
     private int highScore;
     private string hsKey = "HighScore";
+
 
 	public void Start () {
         score = 0;
@@ -21,7 +23,7 @@ public class ScoreController : MonoBehaviour {
 	
     public void UpdateScore() {
         score++;
-
+        pointSound.Play();
         if (score > highScore) {
             PlayerPrefs.SetInt(hsKey, score);
             highScore = score;
