@@ -21,13 +21,15 @@ public class ObstacleController : MonoBehaviour {
     private int blockadeSelector = 1;
     private int tempSelector;
     private float genBlockPoint = 3.5f;
-    private float startSpeed = 3.0f;
+    private float startSpeed = 2.5f;
+    private bool gameIsRunning;
 
 
 	public void Start () {
         speed = startSpeed;
         lastBlockade = genBlockPoint;
         blockadeSelector = 1;
+        gameIsRunning = true;
     }
 	
 	void Update () {
@@ -54,11 +56,13 @@ public class ObstacleController : MonoBehaviour {
             blockadeSelector = tempSelector;
 
             GameObject newPlatform = Instantiate(blockades[blockadeSelector], generationPoint, Quaternion.identity, parentObject);
-            newPlatform.AddComponent<DestroySelf>();
+            newPlatform.AddComponent<BlockController>();
+            newPlatform.tag = "block";
+            //newPlatform.
         }
 
         // Update speed variable
-        if (speed <= maxSpeed) {
+        if (speed <= maxSpeed && gameIsRunning == true) {
             speed += speedIncrement;
         }
 
@@ -69,5 +73,6 @@ public class ObstacleController : MonoBehaviour {
 
     public void stopBlocks() {
         speed = 0;
+        gameIsRunning = false;
     }
 }

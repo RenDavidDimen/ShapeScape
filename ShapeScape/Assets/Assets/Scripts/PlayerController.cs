@@ -81,7 +81,7 @@ public class PlayerController : MonoBehaviour {
     private void OnCollisionEnter2D (Collision2D other) {
         moveInput = false;
         if (other.gameObject.tag == "block") {
-            gameManager.RestartGame();   
+            gameManager.PauseGame();   
         }
     }
 }
