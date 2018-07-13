@@ -13,27 +13,36 @@ public class GameManager : MonoBehaviour {
     private Vector2 playerStartPos = new Vector2(0, -3.5f);
     private Vector2 blockStartPos = new Vector2(0, 7);
     private BlockController[] blocksArray;
+    private Gate[] gatesArray;
 
     public void PauseGame() {
-        obstacleController.stopBlocks();
+        obstacleController.StopBlocks();
+        player.SetAlive(false);
         deathSound.Play();
         deathMenu.gameObject.SetActive(true);
-        //StartCoroutine("RestartGameCoroutine");
     }
 
     public void Reset()
     {
         player.gameObject.SetActive(false);
+        // Destroy Blocks
         blocksArray = FindObjectsOfType<BlockController>();
         for (int i = 0; i < blocksArray.Length; i++)
         {
             Destroy(blocksArray[i].gameObject);
         }
+        // Destroy Gates
+        gatesArray = FindObjectsOfType<Gate>();
+        for (int i = 0; i < gatesArray.Length; i++)
+        {
+            Destroy(gatesArray[i].gameObject);
+        }
+
         firstBlock.transform.position = blockStartPos;
         player.transform.position = playerStartPos;
         scoreController.Start();
         obstacleController.Start();
-        player.resetPlayer();
+        player.ResetPlayer();
         player.gameObject.SetActive(true);
         deathMenu.gameObject.SetActive(false);
     }

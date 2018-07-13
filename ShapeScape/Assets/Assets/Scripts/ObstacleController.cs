@@ -7,6 +7,7 @@ public class ObstacleController : MonoBehaviour {
     // public variables
     public Transform parentObject;
     public GameObject[] blockades;
+    public GameObject[] gates;
     public float speed;
     public float maxSpeed = 7.0f;
     public float speedIncrement = 0.001f;
@@ -23,6 +24,7 @@ public class ObstacleController : MonoBehaviour {
     private float genBlockPoint = 3.5f;
     private float startSpeed = 2.5f;
     private bool gameIsRunning;
+    private string gateKeyShape;
 
 
 	public void Start () {
@@ -53,12 +55,56 @@ public class ObstacleController : MonoBehaviour {
                 tempSelector = Random.Range(0, blockades.Length);
             } while (tempSelector == blockadeSelector);
 
+
+            // Adds gate if Blockade is type sides
             blockadeSelector = tempSelector;
 
-            GameObject newPlatform = Instantiate(blockades[blockadeSelector], generationPoint, Quaternion.identity, parentObject);
-            newPlatform.AddComponent<BlockController>();
-            newPlatform.tag = "block";
-            //newPlatform.
+            if (blockadeSelector == 1)
+            {
+                int genGate = Random.Range(0, 10);
+                if (genGate <= 3)
+                {
+                    // Generate Gate
+                    GameObject newGate = Instantiate(gates[genGate], generationPoint, Quaternion.identity, parentObject);
+                    newGate.AddComponent<Gate>();
+                    Gate tempGate = newGate.GetComponent<Gate>();
+
+                    switch (genGate) {
+                        case 0:
+                            gateKeyShape = "triangle";
+                            break;
+                        case 1:
+                            gateKeyShape = "square";
+                            break;
+                        case 2:
+                            gateKeyShape = "hexagon";
+                            break;
+                        case 3:
+                            gateKeyShape = "circle";
+                            break;
+                    }
+
+                    tempGate.SetGateKey(gateKeyShape);
+
+                    // Generate Platform
+                    GameObject newPlatform = Instantiate(blockades[blockadeSelector], generationPoint, Quaternion.identity, parentObject);
+                    newPlatform.AddComponent<BlockController>();
+                    newPlatform.tag = "block";
+                } else {
+                    // Generate Platform
+                    GameObject newPlatform = Instantiate(blockades[blockadeSelector], generationPoint, Quaternion.identity, parentObject);
+                    newPlatform.AddComponent<BlockController>();
+                    newPlatform.tag = "block";
+                }
+            }
+            else
+            {
+
+                // Generate Platform
+                GameObject newPlatform = Instantiate(blockades[blockadeSelector], generationPoint, Quaternion.identity, parentObject);
+                newPlatform.AddComponent<BlockController>();
+                newPlatform.tag = "block";
+            }
         }
 
         // Update speed variable
@@ -71,7 +117,7 @@ public class ObstacleController : MonoBehaviour {
         }
 	}
 
-    public void stopBlocks() {
+    public void StopBlocks() {
         speed = 0;
         gameIsRunning = false;
     }
