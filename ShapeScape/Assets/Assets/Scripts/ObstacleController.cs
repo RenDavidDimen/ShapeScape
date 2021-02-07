@@ -9,7 +9,7 @@ public class ObstacleController : MonoBehaviour {
     public GameObject[] blockades;
     public GameObject[] gates;
     public float speed;
-    public float maxSpeed = 7.0f;
+    public float MAX_SPEED = 7.0f;
     public float speedIncrement = 0.001f;
     public float lastBlockade;
     public float minBlockadeGenPoint = 2.0f;
@@ -21,15 +21,15 @@ public class ObstacleController : MonoBehaviour {
     private float furthestBlock = -10;
     private int blockadeSelector = 1;
     private int tempSelector;
-    private float genBlockPoint = 3.5f;
-    private float startSpeed = 2.5f;
+    private float GEN_BLOCK_POINT = 3.5f;
+    private float START_SPEED = 2.5f;
     private bool gameIsRunning;
     private string gateKeyShape;
 
 
 	public void Start () {
-        speed = startSpeed;
-        lastBlockade = genBlockPoint;
+        speed = START_SPEED;
+        lastBlockade = GEN_BLOCK_POINT;
         blockadeSelector = 1;
         gameIsRunning = true;
     }
@@ -51,14 +51,14 @@ public class ObstacleController : MonoBehaviour {
         // Add block if enough space
         if (furthestBlock <= lastBlockade) {
 
+            // Ensures two blockades of the same type do not repeat
             do {
                 tempSelector = Random.Range(0, blockades.Length);
             } while (tempSelector == blockadeSelector);
 
-
-            // Adds gate if Blockade is type sides
             blockadeSelector = tempSelector;
 
+            // Adds gate if Blockade is type sides
             if (blockadeSelector == 1)
             {
                 int genGate = Random.Range(0, 10);
@@ -108,7 +108,7 @@ public class ObstacleController : MonoBehaviour {
         }
 
         // Update speed variable
-        if (speed <= maxSpeed && gameIsRunning == true) {
+        if (speed <= MAX_SPEED && gameIsRunning == true) {
             speed += speedIncrement;
         }
 

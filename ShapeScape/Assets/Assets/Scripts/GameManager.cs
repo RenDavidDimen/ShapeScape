@@ -10,8 +10,8 @@ public class GameManager : MonoBehaviour {
     public ScoreController scoreController;
     public GameObject deathMenu;
     public AudioSource deathSound;
-    private Vector2 playerStartPos = new Vector2(0, -3.5f);
-    private Vector2 blockStartPos = new Vector2(0, 7);
+    private Vector2 PLAYER_START_POSITION = new Vector2(0, -3.5f);
+    private Vector2 BLOCK_START_POSITION = new Vector2(0, 7);
     private BlockController[] blocksArray;
     private Gate[] gatesArray;
 
@@ -25,7 +25,7 @@ public class GameManager : MonoBehaviour {
     public void Reset()
     {
         player.gameObject.SetActive(false);
-        // Destroy Blocks
+        // Destroy Blocks with the object BlockController
         blocksArray = FindObjectsOfType<BlockController>();
         for (int i = 0; i < blocksArray.Length; i++)
         {
@@ -38,8 +38,8 @@ public class GameManager : MonoBehaviour {
             Destroy(gatesArray[i].gameObject);
         }
 
-        firstBlock.transform.position = blockStartPos;
-        player.transform.position = playerStartPos;
+        firstBlock.transform.position = BLOCK_START_POSITION;
+        player.transform.position = PLAYER_START_POSITION;
         scoreController.Start();
         obstacleController.Start();
         player.ResetPlayer();
